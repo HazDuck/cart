@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useContext} from 'react'
+import Count from './Count'
+import IncDec from './IncDec'
+import './App.css'
+import { AppContext } from './AppContext'
 
-function App() {
+const axios = require('axios')
+
+function App(props) {
+  const [starWarsCharacter, setStarWarsCharacter] = useState('')
+  
+  const getMeAStarWarsCharacter = async () => {
+    const response = await axios.get('https://swapi.co/api/people/1/')
+    return setStarWarsCharacter(response.data.name)
+  }
+
+//question for leigh - why can i access peteState below?
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <AppContext>
+          <Count/>
+          <IncDec/>
+          <p onClick={getMeAStarWarsCharacter}>Get me a star wars character: {starWarsCharacter} </p>
+      </AppContext>
     </div>
-  );
+  )
 }
 
 export default App;
