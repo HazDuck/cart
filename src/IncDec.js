@@ -4,7 +4,7 @@ import { MyContext } from './AppContext';
 
 const IncDec = (props) => {
 
-  const [peteState, setPeteState, dispatch, statey] = useContext(MyContext)
+  const [dispatch, statey, peteState, setPeteState] = useContext(MyContext)
 
     return(
       <React.Fragment>
