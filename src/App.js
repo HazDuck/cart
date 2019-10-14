@@ -2,7 +2,6 @@ import React from 'react'
 import './App.css'
 import { AppContext } from './AppContext'
 import { Products } from './Products';
-import { Router, Link, Switch, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Basket from './Basket';
 

@@ -2,16 +2,16 @@ import React, { useContext } from 'react'
 import {Button, Card } from 'react-bootstrap';
 import { MyContext } from './AppContext';
 
-const selectedProduct = (e, setPeteState) => {
+const selectedProduct = (e) => {
   const target = e.target
   const parent = target.parentElement
   const update = {
     type: 'addProductToCart',
     payload: {
-      id: parent.getAttribute('idNo')
+      id: parent.getAttribute('idnumber')
     }
   }
-  return setPeteState(update)
+  return update
 }
 
 const Products = (props) => {
@@ -24,12 +24,13 @@ const Products = (props) => {
       {showProducts.map((product) => {
         return (
           <React.Fragment>
-            <Card.Body idNo={product[1].id} onClick={()=>{console.log(showProducts)}}>
-                ID:{product[1].id} Name: {product[1].productName} Cost: {product[1].price}<br/>
-              <Button 
-              onClick={(e) => {
-                console.log(selectedProduct(e))
-                dispatch(selectedProduct(e))}} 
+            <Card.Body 
+            idnumber={product[1].id}>
+                ID:{product[1].id} 
+                Name: {product[1].productName} 
+                Cost: {product[1].price}<br/>
+              <Button
+              onClick={(e) => {dispatch(selectedProduct(e))}} 
               variant="primary">Add to cart</Button>
             </Card.Body>
           </React.Fragment>

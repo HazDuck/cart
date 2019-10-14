@@ -1,8 +1,8 @@
 import React, { createContext, useState, useReducer,} from 'react'
 
 const MyContext = createContext(
-  [{}, ()=>{}]
   //what do? 
+  [{}, ()=>{}]
   )
 
   const AppContext = (props) => {
@@ -36,7 +36,7 @@ const MyContext = createContext(
           case 'addProductToCart':
             return {...state, cart: {
               numberOfProducts: state.cart.numberOfProducts + 1,
-              // subtotal = state.cart.subtotal + ()
+              subtotal: state.cart.subtotal + state.products[parseInt(action.payload.id)].price
             }}
             case 'inc': 
             return { ...state,  value: state.value +1 }
