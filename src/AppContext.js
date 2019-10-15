@@ -13,8 +13,8 @@ const MyContext = createContext(
       color: 'red',
       cart: {
         numberOfProducts: 0,
-        products: '',
-        subtotal: 0.00
+        products: [],
+        subtotal: 0.00, 
       }, 
       products: {
         1: {
@@ -36,7 +36,9 @@ const MyContext = createContext(
           case 'addProductToCart':
             return {...state, cart: {
               numberOfProducts: state.cart.numberOfProducts + 1,
-              subtotal: state.cart.subtotal + state.products[parseInt(action.payload.id)].price
+              subtotal: state.cart.subtotal + state.products[parseInt(action.payload.id)].price,
+              // products: state.cart.products.push(parseInt(action.payload.id)),
+              products: state.cart.products.push('cat'),
             }}
             case 'inc': 
             return { ...state,  value: state.value +1 }

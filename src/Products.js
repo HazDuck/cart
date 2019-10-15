@@ -2,13 +2,14 @@ import React, { useContext } from 'react'
 import {Button, Card } from 'react-bootstrap';
 import { MyContext } from './AppContext';
 
-const selectedProduct = (e) => {
+const selectedProduct = (e, state) => {
   const target = e.target
   const parent = target.parentElement
   const update = {
     type: 'addProductToCart',
     payload: {
-      id: parent.getAttribute('idnumber')
+      id: parent.getAttribute('idnumber'),
+      products: state.cart.products
     }
   }
   return update
@@ -30,7 +31,11 @@ const Products = (props) => {
                 Name: {product[1].productName} 
                 Cost: {product[1].price}<br/>
               <Button
-              onClick={(e) => {dispatch(selectedProduct(e))}} 
+              onClick={(e) => {
+                dispatch(selectedProduct(e, statey))
+                console.log(statey.cart.products)
+              }
+              } 
               variant="primary">Add to cart</Button>
             </Card.Body>
           </React.Fragment>
