@@ -12,10 +12,14 @@ const MyContext = createContext(
       value: 99,
       color: 'red',
       cart: {
+        //swap out to use a line items with {quantity: x and products {}}
         numberOfProducts: 0,
         products: [],
         subtotal: 0.00, 
+        numberOfEachProduct: {}
+        //swao
       }, 
+      //swap this out to an array of objects
       products: {
         1: {
           id: 1,
@@ -36,17 +40,17 @@ const MyContext = createContext(
           case 'addProductToCart':
             return {...state, cart: {
               numberOfProducts: state.cart.numberOfProducts + 1,
+              products: [...state.cart.products, state.products[parseInt(action.payload.id)]],
               subtotal: state.cart.subtotal + state.products[parseInt(action.payload.id)].price,
-              // products: state.cart.products.push(parseInt(action.payload.id)),
-              products: state.cart.products.push('cat'),
+              numberOfEachProduct: action.payload.numberOfEachProduct
             }}
-            case 'inc': 
+          case 'inc': 
             return { ...state,  value: state.value +1 }
-            case 'dec': 
+          case 'dec': 
             return { ...state,  value: state.value -1 }
-            case 'resetCount': 
+          case 'resetCount': 
             return { ...state,  value: 0 }
-            default:
+          default:
             return console.log("error mofo")
           } 
       }, peteState)
