@@ -11,15 +11,23 @@ const MyContext = createContext(
       numberOfClicks: 0,
       value: 99,
       color: 'red',
-      cart: {
-        //swap out to use a line items with {quantity: x and products {}}
+      
+
+        // cart: [
+        //   { 
+        //     product: {},
+        //     quantity: 0,
+        //     subtotal: 0
+        //   }
+        // ]
+
+        cart: {
         numberOfProducts: 0,
         products: [],
         subtotal: 0.00, 
         numberOfEachProduct: {}
-        //swao
       }, 
-      //swap this out to an array of objects
+      //swap this out to an array of objects?
       products: {
         1: {
           id: 1,
