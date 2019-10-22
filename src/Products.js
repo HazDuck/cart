@@ -3,38 +3,56 @@ import {Button, Card } from 'react-bootstrap';
 import { MyContext } from './AppContext';
 import { countTypeOfProduct } from './Basket'
 
-const selectedProduct = (e, state) => {
-  const target = e.target
-  const parent = target.parentElement
-  const numberOfEachProduct = countTypeOfProduct(state.cart.products)
-  const update = {
-    type: 'addProductToCart',
-    payload: {
-      id: parent.getAttribute('idnumber'),
-      products: state.cart.products,
-      numberOfEachProduct: numberOfEachProduct
-    }
+// const skuOfProducts = (data) => {
+//   let arrayOfIds = []
+//   data.forEach(lineItem => {
+//     arrayOfIds.push(lineItem.sku)
+//     })
+//     return arrayOfIds
+// }
+
+const selectedProduct = (sku) => {
+  const increaseQuantity = {
+    type: 'increaseQuantity',
+    payload: sku
   }
-  return update
+  return increaseQuantity
 }
 
-const Products = (props) => {
+const addProduct = (sku) => {
+  const addProduct = {
 
-  const [dispatch, statey, peteState, setPeteState] = useContext(MyContext)
-  const showProducts = Object.values(statey.products)
-  return (
-    <Card>
-      {showProducts.map((product) => {
+  }
+}
+
+  // const update = {
+    //   type: 'addProductToCart',
+    //   payload: {
+      //     id: parent.getAttribute('idnumber'),
+      
+      //     products: state.cart.products,
+      //     numberOfEachProduct: numberOfEachProduct
+      //   }
+      // }
+      // return update
+    
+
+
+    const Products = (props) => {
+      const [dispatch, state, peteState, setPeteState] = useContext(MyContext)
+      return (
+        <Card>
+        {state.products.map((product) => {
         return (
           <div>
             <Card.Body 
-            idnumber={product.id}>
-              ID:{product.id} 
+            idnumber={product.sku}>
+              ID:{product.sku} 
               Name: {product.productName} 
               Cost: {product.price}<br/>
               <Button
-              onClick={(e) => {
-                dispatch(selectedProduct(e, statey))}} 
+              onClick={() => {
+                dispatch(selectedProduct(product.sku, state))}} 
               variant="primary">
                 Add to cart
               </Button>

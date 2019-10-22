@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import {Button, Card } from 'react-bootstrap'
 import { MyContext } from './AppContext'
-import { array } from 'prop-types';
 
 const onlyUnique = (value, index, self) => { 
   return self.indexOf(value) === index;
@@ -39,34 +38,43 @@ const countNumberOfEachProduct = (arrayOfIds, uniqueVals) => {
   return productCount
 }
 
+const makeArrayOfItems = (data) => {
+  let arrayOfIds = []
+  data.forEach(lineItem => {
+    arrayOfIds.push(lineItem.quantity)
+    })
+    return arrayOfIds
+}
+
 const Basket = (props) => {
-  const [dispatch, statey, peteState, setPeteState] = useContext(MyContext)
+  const [dispatch, state, peteState, setPeteState] = useContext(MyContext)
+  console.log("the state called at the basket: ")
+  console.log(state.cart)
   return (
     <Card>
       <div>
         <p>Welcome to the basket</p>
-        <p>{statey.cart.products.map((product)=>{
-          
+        <p>{state.cart.map((lineItem)=>{
             return (
               <Card.Body>
-              ID:{product.id}
-              Name:{product.productName}
-              Cost:{product.price}
-              Count: { statey.cart.numberOfEachProduct[product.id] 
-                ? statey.cart.numberOfEachProduct[product.id] : 1 } 
+              ID:{lineItem.product.sku}
+              Name:{lineItem.product.productName}
+              Cost:{lineItem.product.price}
+              Count: {lineItem.quantity}
               <Button
                 onClick={()=>console.log('remove!')}
                 >Remove from basket</Button>
             </Card.Body> 
           )
-        })}</p>
-        <p>Number of Products: {statey.cart.numberOfProducts}</p>
-        <p>Subtotal: £{statey.cart.subtotal}</p>
+        })
+        }
+        </p>
+        {/* <p>Number of Products: {makeArrayOfItems(state.cart)}</p> */}
+        <p>Subtotal: £</p>
         <Button>Empty Basket</Button>
       </div>
     </Card>
   )
 }
-// makeUniqueIDArray(makeArrayOfProducts(statey.cart.products))
 
 export { Basket, countTypeOfProduct }

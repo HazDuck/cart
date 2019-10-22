@@ -11,60 +11,57 @@ const MyContext = createContext(
       numberOfClicks: 0,
       value: 99,
       color: 'red',
-      
+      cart: [
+        //line item
+        { 
+          sku: 101,
+          quantity: 12,
+          lineItemTotal: 0,
+          product: {
+            sku: 101, 
+            productName: 'bob', 
+            price: 112.00
+          }
+        }
+      ],
 
-        // cart: [
-        //   { 
-        //     product: {},
-        //     quantity: 0,
-        //     subtotal: 0
-        //   }
-        // ]
-
-        cart: {
-        numberOfProducts: 0,
-        products: [],
-        subtotal: 0.00, 
-        numberOfEachProduct: {}
-      }, 
-      //swap this out to an array of objects?
-      products: {
-        1: {
-          id: 1,
+      products: [
+        {
+          sku: 101,
           productName: 'cup',
           price: 5.00
         },
-        2: {
-          id: 2,
+        {
+          sku: 102,
           productName: 'fork',
           price: 10.00
         }
-      }
+      ]
     })
 
-    const [statey, dispatch] = useReducer(
+    const [state, dispatch] = useReducer(
       (state, action) => {
         switch (action.type) {
-          case 'addProductToCart':
-            return {...state, cart: {
-              numberOfProducts: state.cart.numberOfProducts + 1,
-              products: [...state.cart.products, state.products[parseInt(action.payload.id)]],
-              subtotal: state.cart.subtotal + state.products[parseInt(action.payload.id)].price,
-              numberOfEachProduct: action.payload.numberOfEachProduct
-            }}
-          case 'inc': 
-            return { ...state,  value: state.value +1 }
-          case 'dec': 
-            return { ...state,  value: state.value -1 }
-          case 'resetCount': 
-            return { ...state,  value: 0 }
+          case 'increaseQuantity':
+          //get access to the cart spreading the cart.state inside an array as is req
+          const cart = [...state.cart]
+          //create a new array of everything we dont want effect. items with a sku that doesnt match the clicked item
+          const cleanCart = cart.filter(cartItem => cartItem.sku !== action.payload)
+          //grab our target obj from our original array
+          const incrementTarget = cart.find(cartItem => cartItem.sku === action.payload)
+          //object assign parameters are where its going, whats being copied, whats being amended
+          const incremented = Object.assign({}, incrementTarget, {quantity: incrementTarget.quantity + 1})
+          //puy the array of objects back together
+          const outputCart = [...cleanCart, incremented]
+          //create a fresh object, copy state and put it in, amend cart so be the reconstituted array of objects
+          return Object.assign({}, state, {cart: outputCart})
           default:
             return console.log("error mofo")
           } 
       }, peteState)
   
   return (
-    <MyContext.Provider value={[dispatch, statey, peteState, setPeteState]}>
+    <MyContext.Provider value={[dispatch, state, peteState, setPeteState]}>
         {props.children}
     </MyContext.Provider>
   )
