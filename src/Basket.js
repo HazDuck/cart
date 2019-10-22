@@ -48,19 +48,17 @@ const makeArrayOfItems = (data) => {
 
 const Basket = (props) => {
   const [dispatch, state, peteState, setPeteState] = useContext(MyContext)
-  console.log("the state called at the basket: ")
-  console.log(state.cart)
   return (
     <Card>
       <div>
         <p>Welcome to the basket</p>
-        <p>{state.cart.map((lineItem)=>{
+        <p>{state.cart.map((product)=>{
             return (
               <Card.Body>
-              ID:{lineItem.product.sku}
-              Name:{lineItem.product.productName}
-              Cost:{lineItem.product.price}
-              Count: {lineItem.quantity}
+              ID:{product.sku}
+              Name:{product.productName}
+              Cost:{product.price}
+              Count: {product.quantity}
               <Button
                 onClick={()=>console.log('remove!')}
                 >Remove from basket</Button>

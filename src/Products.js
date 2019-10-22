@@ -3,13 +3,21 @@ import {Button, Card } from 'react-bootstrap';
 import { MyContext } from './AppContext';
 import { countTypeOfProduct } from './Basket'
 
-// const skuOfProducts = (data) => {
-//   let arrayOfIds = []
-//   data.forEach(lineItem => {
-//     arrayOfIds.push(lineItem.sku)
-//     })
-//     return arrayOfIds
-// }
+const incrementOrNewProduct = (cart, newProduct) => {
+  let arrayOfIds = []
+  cart.forEach(product => {
+    arrayOfIds.push(product.sku)
+    })
+  arrayOfIds.filter(sku => sku === newProduct.sku)
+  if (arrayOfIds) {
+    console.log("increment")
+    return
+  }
+  else {
+    console.log("add a new product")
+    return
+  }
+}
 
 const selectedProduct = (sku) => {
   const increaseQuantity = {
@@ -19,24 +27,14 @@ const selectedProduct = (sku) => {
   return increaseQuantity
 }
 
-const addProduct = (sku) => {
+const addProduct = (product) => {
+  //pass the product not the state
   const addProduct = {
-
-  }
+    type: 'addProduct',
+    payload: product  
+    }
+  return addProduct
 }
-
-  // const update = {
-    //   type: 'addProductToCart',
-    //   payload: {
-      //     id: parent.getAttribute('idnumber'),
-      
-      //     products: state.cart.products,
-      //     numberOfEachProduct: numberOfEachProduct
-      //   }
-      // }
-      // return update
-    
-
 
     const Products = (props) => {
       const [dispatch, state, peteState, setPeteState] = useContext(MyContext)
@@ -54,7 +52,14 @@ const addProduct = (sku) => {
               onClick={() => {
                 dispatch(selectedProduct(product.sku, state))}} 
               variant="primary">
-                Add to cart
+                Increment
+              </Button>
+              <Button
+              onClick={() => {
+                incrementOrNewProduct(state.cart, product)
+                dispatch(addProduct(product))}}
+              >
+                Add product
               </Button>
             </Card.Body>
           </div>
