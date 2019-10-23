@@ -30,6 +30,7 @@ const MyContext = createContext(
       (state, action) => {
         //get access to the cart spreading the cart.state inside an array as is req
         let cart = []
+        let updatedState = {}
         switch (action.type) {
           case 'increaseQuantity':
             cart = [...state.cart]
@@ -42,17 +43,24 @@ const MyContext = createContext(
               //puy the array of objects back together
               const outputCart = [...cleanCart, incremented]
               //create a fresh object, copy state and put it in, amend cart so be the reconstituted array of objects
-              return Object.assign({}, state, {cart: outputCart})
+              updatedState = Object.assign({}, state, {cart: outputCart})
+              return updatedState
           case 'addProduct':
             //get access to the cart spreading the cart.state inside an array as is req
             cart = [...state.cart]
-            return Object.assign({},state, {cart: [...cart, action.payload]})
+            window.localStorage.setItem('name','pete')
+            updatedState = Object.assign({},state, {cart: [...cart, action.payload]})
+            return updatedState
           case 'removeItemFromCart':
               cart = [...state.cart]
             const cartRemovedItem = cart.filter(product => product.sku !== action.payload)
             //third parameter has to be an object?
-            const newState = Object.assign({}, state, {cart: cartRemovedItem})
-            return newState
+            updatedState = Object.assign({}, state, {cart: cartRemovedItem})
+            return updatedState
+          case 'emptyCart':
+              cart = [...state.cart]
+              updatedState = Object.assign({}, state, {cart: []})
+              return updatedState
           default:
             return console.log("error mofo")
           } 

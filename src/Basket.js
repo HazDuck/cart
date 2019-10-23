@@ -59,6 +59,13 @@ const removeItemFromCart = sku => {
   return removeItemFromCart
 }
 
+const emptyCart = () => {
+  const emptyCart = {
+    type: 'emptyCart',
+  }
+  return emptyCart
+}
+
 const Basket = (props) => {
   const [dispatch, state, peteState, setPeteState] = useContext(MyContext)
   return (
@@ -81,7 +88,9 @@ const Basket = (props) => {
         }
         </p>
         <p>Subtotal: £{state.cart.length > 0 ? state.cart.reduce(cartTotal, 0) : 0}</p>
-        <Button>Empty Basket</Button>
+        <Button
+          onClick={() => {dispatch(emptyCart())}}
+        >Empty Basket</Button>
       </div>
     </Card>
   )
