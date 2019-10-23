@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import {Button, Card } from 'react-bootstrap'
 import { MyContext } from './AppContext'
+import { increaseQuantity } from './Products';
 
 const onlyUnique = (value, index, self) => { 
   return self.indexOf(value) === index;
@@ -66,6 +67,14 @@ const emptyCart = () => {
   return emptyCart
 }
 
+const decreaseQuantity = (sku) => {
+  const decreaseQuantity = {
+    type: 'decreaseQuantity',
+    payload: sku
+  }
+  return decreaseQuantity
+}
+
 const Basket = (props) => {
   const [dispatch, state, peteState, setPeteState] = useContext(MyContext)
   const locaStoragelState = JSON.parse(window.localStorage.getItem('cart'))
@@ -76,25 +85,34 @@ const Basket = (props) => {
     <Card>
       <div>
         <p>Welcome to the basket</p>
-        <p>{state.cart.map((product)=>{
+        <div>{state.cart.map((product)=>{
             return (
-              <Card.Body>
+              <Card.Body key={product.sku}>
               ID:{product.sku}
               Name:{product.productName}
               Cost:{product.price}
               Count: {product.quantity}
               <Button
-                onClick={() => {dispatch(removeItemFromCart(product.sku))}}
-                >Remove from basket</Button>
+              onClick={() => {dispatch(increaseQuantity(product.sku))}}>
+                +
+              </Button>
+              <Button
+              onClick={() => {dispatch(decreaseQuantity(product.sku))}}>
+                -
+              </Button>
+              <Button
+              onClick={() => {dispatch(removeItemFromCart(product.sku))}}>
+                Remove from basket
+              </Button>
             </Card.Body> 
           )
         })
         }
-        </p>
+        </div>
         <p>Subtotal: £{state.cart.length > 0 ? state.cart.reduce(cartTotal, 0) : 0}</p>
-        <Button
-          onClick={() => {dispatch(emptyCart())}}
-        >Empty Basket</Button>
+        <Button onClick={() => {dispatch(emptyCart())}}>
+          Empty Basket
+        </Button>
       </div>
     </Card>
   )

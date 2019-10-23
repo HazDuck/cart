@@ -10,14 +10,14 @@ const incrementOrNewProduct = (cart, newProduct) => {
     })
   const productSKU = arrayOfIds.find(product => product === newProduct.sku)
   if (productSKU) {
-    return selectedProduct(newProduct.sku)
+    return increaseQuantity(newProduct.sku)
   }
   else {
     return addProduct(newProduct)
   }
 }
 
-const selectedProduct = (sku) => {
+const increaseQuantity = (sku) => {
   const increaseQuantity = {
     type: 'increaseQuantity',
     payload: sku
@@ -40,7 +40,7 @@ const addProduct = (product) => {
         <Card>
         {state.products.map((product) => {
         return (
-          <div>
+          <div key={product.sku}>
             <Card.Body 
             idnumber={product.sku}>
               ID:{product.sku} 
@@ -58,4 +58,4 @@ const addProduct = (product) => {
   )
 }
 
-export { Products }
+export { Products, increaseQuantity }

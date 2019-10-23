@@ -25,6 +25,12 @@ const AppContext = (props) => {
         productName: 'fork',
         price: 10.00,
         quantity: 1,
+      },
+      {
+        sku: 103,
+        productName: 'plate',
+        price: 150.00,
+        quantity: 1,
       }
     ]
   })
@@ -37,7 +43,7 @@ const AppContext = (props) => {
       switch (action.type) {
         case 'increaseQuantity':
           cart = [...state.cart]
-          //create a new array of everything we dont want effect. items with a sku that doesnt match the clicked item
+          //create a new array of everything we dont want to effect - all items with a sku that doesnt match the clicked item
           const cleanCart = cart.filter(cartItem => cartItem.sku !== action.payload)
           //grab our target obj from our original array
           const incrementTarget = cart.find(cartItem => cartItem.sku === action.payload)
@@ -47,12 +53,24 @@ const AppContext = (props) => {
           const outputCart = [...cleanCart, incremented]
           //create a fresh object, copy state and put it in, amend cart so be the reconstituted array of objects
           updatedState = Object.assign({}, state, {cart: outputCart})
+          console.log(updatedState)
+          setLocalStorage(updatedState)
+          return updatedState
+        case 'decreaseQuantity':
+          cart = [...state.cart]
+          const cleanCartAgain = cart.filter(cartItem => cartItem.sku !== action.payload)
+          const decreaseTarget = cart.find(cartItem => cartItem.sku === action.payload)
+          const decreased = Object.assign({}, decreaseTarget, {quantity: decreaseTarget.quantity > 0 ? decreaseTarget.quantity - 1 : 0 })
+          const outputCartAgain = [...cleanCartAgain, decreased]
+          updatedState = Object.assign({}, state, {cart: outputCartAgain})
+          console.log(updatedState)
           setLocalStorage(updatedState)
           return updatedState
         case 'addProduct':
           //get access to the cart spreading the cart.state inside an array as is req
           cart = [...state.cart]
           updatedState = Object.assign({},state, {cart: [...cart, action.payload]})
+          console.log(updatedState)
           setLocalStorage(updatedState)
           return updatedState
         case 'removeItemFromCart':
