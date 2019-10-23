@@ -68,6 +68,10 @@ const emptyCart = () => {
 
 const Basket = (props) => {
   const [dispatch, state, peteState, setPeteState] = useContext(MyContext)
+  const locaStoragelState = JSON.parse(window.localStorage.getItem('cart'))
+  if (locaStoragelState) {
+    state.cart = locaStoragelState
+  }
   return (
     <Card>
       <div>
