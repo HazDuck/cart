@@ -8,14 +8,12 @@ const incrementOrNewProduct = (cart, newProduct) => {
   cart.forEach(product => {
     arrayOfIds.push(product.sku)
     })
-  arrayOfIds.filter(sku => sku === newProduct.sku)
-  if (arrayOfIds) {
-    console.log("increment")
-    return
+  const productSKU = arrayOfIds.find(product => product === newProduct.sku)
+  if (productSKU) {
+    return selectedProduct(newProduct.sku)
   }
   else {
-    console.log("add a new product")
-    return
+    return addProduct(newProduct)
   }
 }
 
@@ -49,17 +47,8 @@ const addProduct = (product) => {
               Name: {product.productName} 
               Cost: {product.price}<br/>
               <Button
-              onClick={() => {
-                dispatch(selectedProduct(product.sku, state))}} 
-              variant="primary">
-                Increment
-              </Button>
-              <Button
-              onClick={() => {
-                incrementOrNewProduct(state.cart, product)
-                dispatch(addProduct(product))}}
-              >
-                Add product
+              onClick={() => {dispatch(incrementOrNewProduct(state.cart, product))}}>
+                Add to cart
               </Button>
             </Card.Body>
           </div>

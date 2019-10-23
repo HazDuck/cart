@@ -46,6 +46,19 @@ const makeArrayOfItems = (data) => {
     return arrayOfIds
 }
 
+const cartTotal = (accumulator, currentValue ) => {
+  const itemTotal = currentValue.quantity * currentValue.price
+  return accumulator + itemTotal
+}
+
+const removeItemFromCart = sku => {
+  const removeItemFromCart = {
+    type: 'removeItemFromCart',
+    payload: sku
+  }
+  return removeItemFromCart
+}
+
 const Basket = (props) => {
   const [dispatch, state, peteState, setPeteState] = useContext(MyContext)
   return (
@@ -60,15 +73,14 @@ const Basket = (props) => {
               Cost:{product.price}
               Count: {product.quantity}
               <Button
-                onClick={()=>console.log('remove!')}
+                onClick={() => {dispatch(removeItemFromCart(product.sku))}}
                 >Remove from basket</Button>
             </Card.Body> 
           )
         })
         }
         </p>
-        {/* <p>Number of Products: {makeArrayOfItems(state.cart)}</p> */}
-        <p>Subtotal: £</p>
+        <p>Subtotal: £{state.cart.length > 0 ? state.cart.reduce(cartTotal, 0) : 0}</p>
         <Button>Empty Basket</Button>
       </div>
     </Card>

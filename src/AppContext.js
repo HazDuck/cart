@@ -8,12 +8,8 @@ const MyContext = createContext(
   const AppContext = (props) => {
     
     const [peteState, setPeteState] = useState({
-      numberOfClicks: 0,
-      value: 99,
-      color: 'red',
       //line item - DONT USE NESTED ARRAYS, OBJECTS, ET-FUCKING-C - FLAT AND WIDE - MAKE YOUR LIFE EASY
       cart: [],
-
       products: [
         {
           sku: 101,
@@ -50,7 +46,13 @@ const MyContext = createContext(
           case 'addProduct':
             //get access to the cart spreading the cart.state inside an array as is req
             cart = [...state.cart]
-            return Object.assign({},state, {cart: [...cart,action.payload]})
+            return Object.assign({},state, {cart: [...cart, action.payload]})
+          case 'removeItemFromCart':
+              cart = [...state.cart]
+            const cartRemovedItem = cart.filter(product => product.sku !== action.payload)
+            //third parameter has to be an object?
+            const newState = Object.assign({}, state, {cart: cartRemovedItem})
+            return newState
           default:
             return console.log("error mofo")
           } 
