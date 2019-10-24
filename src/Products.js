@@ -26,7 +26,7 @@ const increaseQuantity = (sku) => {
 }
 
 const addProduct = (product) => {
-  //pass the product not the state
+  //pass the product not the state!!
   const addProduct = {
     type: 'addProduct',
     payload: product  
