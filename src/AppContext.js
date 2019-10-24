@@ -68,9 +68,13 @@ const AppContext = (props) => {
           productIndex = cart.findIndex(product => action.payload === product.sku)
           cleanCart = cart.filter(cartItem => cartItem.sku !== action.payload)
           const decreaseTarget = cart.find(cartItem => cartItem.sku === action.payload)
-          const decreased = Object.assign({}, decreaseTarget, {quantity: decreaseTarget.quantity > 0 ? decreaseTarget.quantity - 1 : 0 })
-          cleanCart.splice(productIndex, 0, decreased)
-          outputCart = cleanCart
+          const decreased = Object.assign({}, decreaseTarget, {quantity: decreaseTarget.quantity - 1 })
+          if (decreased.quantity === 0) {
+            outputCart = cleanCart
+          } else {
+            cleanCart.splice(productIndex, 0, decreased)
+            outputCart = cleanCart
+          }
           updatedState = Object.assign({}, state, {cart: outputCart})
           setLocalStorage(updatedState)
           return updatedState
