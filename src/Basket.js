@@ -81,6 +81,9 @@ const Basket = (props) => {
   if (locaStoragelState) {
     state.cart = locaStoragelState
   }
+  const toSplice = [1,3]
+  // console.log(toSplice.splice(1, 0, 2))
+  // console.log(toSplice)
   return (
     <Card>
       <div>
