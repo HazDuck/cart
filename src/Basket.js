@@ -3,49 +3,6 @@ import {Button, Card } from 'react-bootstrap'
 import { MyContext } from './AppContext'
 import { increaseQuantity } from './Products';
 
-const onlyUnique = (value, index, self) => { 
-  return self.indexOf(value) === index;
-}
-
-const makeArrayOfProducts = (products) => {
-  let arrayOfIds = []
-  products.forEach(product => {
-    arrayOfIds.push(product.id)
-    })
-    return arrayOfIds
-}
-
-const makeUniqueIDArray = array => array.filter(onlyUnique)
-
-const countTypeOfProduct = (products) => {
-  const arrayOfIds = makeArrayOfProducts(products)
-  const uniqueVals = makeUniqueIDArray(arrayOfIds)
-  const countOfProducts = countNumberOfEachProduct(arrayOfIds, uniqueVals)
-  return countOfProducts
-}
-
-const countNumberOfEachProduct = (arrayOfIds, uniqueVals) => {
-  const productCount = {}
-  uniqueVals.forEach((index)=>{
-    productCount[index] = 0
-  })
-  arrayOfIds.forEach(id => {
-    uniqueVals.forEach(value => {
-      if (id === value) {
-        productCount[value]++
-      } 
-    })
-  })
-  return productCount
-}
-
-const makeArrayOfItems = (data) => {
-  let arrayOfIds = []
-  data.forEach(lineItem => {
-    arrayOfIds.push(lineItem.quantity)
-    })
-    return arrayOfIds
-}
 
 const cartTotal = (accumulator, currentValue ) => {
   const itemTotal = currentValue.quantity * currentValue.price
@@ -67,7 +24,7 @@ const emptyCart = () => {
   return emptyCart
 }
 
-const decreaseQuantity = (sku) => {
+const decreaseQuantity = sku => {
   const decreaseQuantity = {
     type: 'decreaseQuantity',
     payload: sku
@@ -86,8 +43,8 @@ const Basket = (props) => {
       <div>
         <p>Welcome to the basket</p>
         <div>{state.cart.map((product)=>{
-            return (
-              <Card.Body key={product.sku}>
+          return (
+            <Card.Body key={product.sku}>
               ID:{product.sku}
               Name:{product.productName}
               Cost:{product.price}
@@ -107,7 +64,7 @@ const Basket = (props) => {
             </Card.Body> 
           )
         })
-        }
+      }
         </div>
         <p>Subtotal: £{state.cart.length > 0 ? state.cart.reduce(cartTotal, 0) : 0}</p>
         <Button onClick={() => {dispatch(emptyCart())}}>
@@ -118,4 +75,48 @@ const Basket = (props) => {
   )
 }
 
-export { Basket, countTypeOfProduct }
+export { Basket }
+
+  // const onlyUnique = (value, index, self) => { 
+  //   return self.indexOf(value) === index;
+  // }
+  
+  // const makeArrayOfProducts = (products) => {
+  //   let arrayOfIds = []
+  //   products.forEach(product => {
+  //     arrayOfIds.push(product.id)
+  //     })
+  //     return arrayOfIds
+  // }
+  
+  // const makeUniqueIDArray = array => array.filter(onlyUnique)
+  
+  // const countTypeOfProduct = (products) => {
+  //   const arrayOfIds = makeArrayOfProducts(products)
+  //   const uniqueVals = makeUniqueIDArray(arrayOfIds)
+  //   const countOfProducts = countNumberOfEachProduct(arrayOfIds, uniqueVals)
+  //   return countOfProducts
+  // }
+  
+  // const countNumberOfEachProduct = (arrayOfIds, uniqueVals) => {
+  //   const productCount = {}
+  //   uniqueVals.forEach((index)=>{
+  //     productCount[index] = 0
+  //   })
+  //   arrayOfIds.forEach(id => {
+  //     uniqueVals.forEach(value => {
+  //       if (id === value) {
+  //         productCount[value]++
+  //       } 
+  //     })
+  //   })
+  //   return productCount
+  // }
+  
+  // const makeArrayOfItems = (data) => {
+  //   let arrayOfIds = []
+  //   data.forEach(lineItem => {
+  //     arrayOfIds.push(lineItem.quantity)
+  //     })
+  //     return arrayOfIds
+  // }

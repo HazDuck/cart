@@ -1,4 +1,5 @@
 import React, { createContext, useState, useReducer,} from 'react'
+import axios from 'axios';
 
 const MyContext = createContext(
   //what do? 
@@ -7,59 +8,48 @@ const MyContext = createContext(
 
 const setLocalStorage = (updatedState) => 
   window.localStorage.setItem('cart', JSON.stringify(updatedState.cart))
-
-const AppContext = (props) => {
+  
+  
+  const AppContext = (props) => {
+    const [peteState, setPeteState] = useState({
+      cart: [],
+      showingSuccessfulAddToCart: false,
+      loaded: false,
+      products: [
+        // {"sku": 101,"department": "home","productName": "cup","price": 5.00,"quantity": 1},{"sku": 102,"department": "office", "productName": "fork", "price": 10.00, "quantity": 1},{"sku": 103,"department": "b2b", "productName": "plate", "price": 100.00, "quantity": 1}
+      ]
+    })
     
-  const [peteState, setPeteState] = useState({
-    //line item - DONT USE NESTED ARRAYS, OBJECTS, ET-FUCKING-C - FLAT AND WIDE - MAKE YOUR LIFE EASY
-    cart: [],
-    products: [
-      {
-        sku: 101,
-        productName: 'cup',
-        price: 5.00,
-        quantity: 1,
-      },
-      {
-        sku: 102,
-        productName: 'fork',
-        price: 10.00,
-        quantity: 1,
-      },
-      {
-        sku: 103,
-        productName: 'plate',
-        price: 100.00,
-        quantity: 1,
-      }
-    ]
-  })
+    const [state, dispatch] = useReducer(
+      (state, action) => {
 
-  const [state, dispatch] = useReducer(
-    (state, action) => {
-      //get access to the cart spreading the cart.state inside an array as is req
-      let cart = []
-      let updatedState = {}
-      let cleanCart = []
-      let outputCart = []
-      let productIndex = ''
-      switch (action.type) {
-
-        case 'increaseQuantity':
-          cart = [...state.cart]
-          productIndex = cart.findIndex(product => action.payload === product.sku)
-          //create a new array of everything we dont want to effect - all items with a sku that doesnt match the clicked item
-          cleanCart = cart.filter(cartItem => cartItem.sku !== action.payload)
-          //grab our target obj from our original array
-          const incrementTarget = cart.find(cartItem => cartItem.sku === action.payload)
-          //object assign parameters are where its going, whats being copied, whats being amended
-          const incremented = Object.assign({}, incrementTarget, {quantity: incrementTarget.quantity + 1})
+        let cart = []
+        let updatedState = {}
+        let cleanCart = []
+        let outputCart = []
+        let productIndex = ''
+        switch (action.type) {
+          
+          case 'getProducts': 
+            cart = [...state.cart]
+            updatedState = Object.assign({}, state, {products: action.payload, loaded: true})
+            return updatedState
+          
+          case 'increaseQuantity':
+            cart = [...state.cart]
+            productIndex = cart.findIndex(product => action.payload === product.sku)
+            //create a new array of everything we dont want to effect - all items with a sku that doesnt match the clicked item
+            cleanCart = cart.filter(cartItem => cartItem.sku !== action.payload)
+            //grab our target obj from our original array
+            const incrementTarget = cart.find(cartItem => cartItem.sku === action.payload)
+            //object assign parameters are where its going, whats being copied, whats being amended
+            const incremented = Object.assign({}, incrementTarget, {quantity: incrementTarget.quantity + 1})
           //put the array of objects back together in the right order - splices mutates the original array
           cleanCart.splice(productIndex, 0, incremented)
           //rename clean cart so its clearer
           outputCart = cleanCart
           //create a fresh object, copy state and put it in, amend cart so be the reconstituted array of objects
-          updatedState = Object.assign({}, state, {cart: outputCart})
+          updatedState = Object.assign({}, state, {showingSuccessfulAddToCart: true, cart: outputCart})
           setLocalStorage(updatedState)
           return updatedState
 
@@ -82,7 +72,7 @@ const AppContext = (props) => {
         case 'addProduct':
           //get access to the cart spreading the cart.state inside an array as is req
           cart = [...state.cart]
-          updatedState = Object.assign({},state, {cart: [...cart, action.payload]})
+          updatedState = Object.assign({},state, {showingSuccessfulAddToCart: true, cart: [...cart, action.payload]})
           setLocalStorage(updatedState)
           return updatedState
 
@@ -100,7 +90,12 @@ const AppContext = (props) => {
           setLocalStorage(updatedState)
           return updatedState
 
-        default:
+        case 'removeAlert':
+          cart = [...state.cart]
+          updatedState = Object.assign({}, state, {showingSuccessfulAddToCart: false})
+          return updatedState
+        
+          default:
           return console.log("error mofo")
         } 
     }, peteState)
