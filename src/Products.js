@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import {Button, Card, Table } from 'react-bootstrap'
+import {Button, Card, Table, Image } from 'react-bootstrap'
 import { MyContext } from './AppContext'
 import axios from 'axios'
 
@@ -41,7 +41,6 @@ const Products = (props) => {
   const removeCartAlert = () => {
     setTimeout(()=>{
       dispatch({type: 'removeAlert'})
-      console.log('remove alert')
     }, 500)
   }
   
@@ -63,6 +62,7 @@ const Products = (props) => {
           <thead>
             <tr>
               <th>ID</th>
+              <th>Image</th>
               <th>Department</th>
               <th>Name</th>
               <th>Cost</th>
@@ -75,6 +75,7 @@ const Products = (props) => {
                 return (
                   <tr key={product.sku}>
                       <td>{product.sku}</td>
+                      <td><Image src={product.image} rounded /></td>
                       <td>{product.department}</td>
                       <td>{product.productName}</td>
                       <td>{product.price}<br/></td>

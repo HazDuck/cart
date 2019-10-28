@@ -15,9 +15,10 @@ const setLocalStorage = (updatedState) =>
       cart: [],
       showingSuccessfulAddToCart: false,
       loaded: false,
-      products: [
-        // {"sku": 101,"department": "home","productName": "cup","price": 5.00,"quantity": 1},{"sku": 102,"department": "office", "productName": "fork", "price": 10.00, "quantity": 1},{"sku": 103,"department": "b2b", "productName": "plate", "price": 100.00, "quantity": 1}
-      ]
+      products: []
+      // [
+      //   {"sku": 101,"department": "home","productName": "cup","price": 5.00,"quantity": 1},{"sku": 102,"department": "office", "productName": "fork", "price": 10.00, "quantity": 1},{"sku": 103,"department": "b2b", "productName": "plate", "price": 100.00, "quantity": 1}
+      // ]
     })
     
     const [state, dispatch] = useReducer(
