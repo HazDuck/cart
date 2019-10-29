@@ -88,7 +88,7 @@ const Products = (props) => {
               })
               :
               <div>
-                <p>loading...</p>
+                <p>loading....</p>
               </div> 
             }
           </tbody>
