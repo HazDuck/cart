@@ -1,27 +1,26 @@
-import React, { useState, useContext} from 'react'
-import Count from './Count'
-import IncDec from './IncDec'
+import React from 'react'
 import './App.css'
 import { AppContext } from './AppContext'
-
-const axios = require('axios')
+import { Products } from './Products';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Basket } from './Basket';
+import { Tabs, Tab, Dropdown } from 'react-bootstrap';
+import { ProductsAlert } from './ProductsAlert';
 
 function App(props) {
-  const [starWarsCharacter, setStarWarsCharacter] = useState('')
-  
-  const getMeAStarWarsCharacter = async () => {
-    const response = await axios.get('https://swapi.co/api/people/1/')
-    return setStarWarsCharacter(response.data.name)
-  }
-
-//question for leigh - why can i access peteState below?
 
   return (
     <div>
       <AppContext>
-          <Count/>
-          <IncDec/>
-          <p onClick={getMeAStarWarsCharacter}>Get me a star wars character: {starWarsCharacter} </p>
+        <Tabs defaultActiveKey="Products" id="uncontrolled-tab-example">
+          <Tab eventKey="Products" title="Products">
+            <Products/>
+            <ProductsAlert/>
+          </Tab>
+          <Tab eventKey="Basket" title="Basket">
+            <Basket/>
+          </Tab>
+        </Tabs>
       </AppContext>
     </div>
   )

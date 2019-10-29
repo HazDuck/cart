@@ -4,14 +4,14 @@ import { MyContext } from './AppContext';
 
 const IncDec = (props) => {
 
-  const [peteState, setPeteState, dispatch, statey] = useContext(MyContext)
+  const [dispatch, state, peteState, setPeteState] = useContext(MyContext)
 
     return(
       <React.Fragment>
         <button onClick={() => dispatch({type: 'inc'})}>+</button>
         <button onClick={() => dispatch({type: 'dec'})}>-</button>
         <button onClick={() => dispatch({type: 'resetCount'})}>Reset</button>
-        <p>Count from using reducer: {statey.value}</p>
+        <p>Count from using reducer: {state.value}</p>
       </React.Fragment>
     )
 }

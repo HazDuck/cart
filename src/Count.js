@@ -3,11 +3,11 @@ import { MyContext } from './AppContext'
 import './App.css';
 
 function Count(props) {
-  const [peteState, setPeteState, dispatch, statey] = useContext(MyContext)
+  const [peteState, setPeteState, dispatch, state] = useContext(MyContext)
 
   return(
     <div>
-      <p>Here is a color: {statey.color}</p>
+      <p>Here is a color: {state.color}</p>
       <button onClick={()=>{return setPeteState({...peteState, numberOfClicks: peteState.numberOfClicks + 1})}}>
         Increase Count
       </button>
@@ -15,7 +15,7 @@ function Count(props) {
         Clear
       </button>
       <p>Number of Clicks {peteState.numberOfClicks}</p>
-      <p>{statey.value}</p>
+      <p>{state.value}</p>
     </div>
   )
 }
