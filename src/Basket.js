@@ -38,6 +38,8 @@ const Basket = (props) => {
   if (locaStoragelState) {
     state.cart = locaStoragelState
   }
+  console.log('state is')
+  console.log(state)
   return (
     <Card>
       <div>
@@ -45,20 +47,21 @@ const Basket = (props) => {
         <div>{state.cart.map((product)=>{
           return (
             <Card.Body key={product.sku}>
-              ID:{product.sku}
-              Name:{product.productName}
-              Cost:{product.price}
-              Count: {product.quantity}
+              {/* ID:{product.sku} */}
+              Name:{product.node.title}
+              Quantity:{product.node.quantity}
+              {/* Cost:{product.price}
+              Count: {product.quantity} */}
               <Button
-              onClick={() => {dispatch(increaseQuantity(product.sku))}}>
+              onClick={() => {dispatch(increaseQuantity(product.node.id))}}>
                 +
               </Button>
               <Button
-              onClick={() => {dispatch(decreaseQuantity(product.sku))}}>
+              onClick={() => {dispatch(decreaseQuantity(product.node.id))}}>
                 -
               </Button>
               <Button
-              onClick={() => {dispatch(removeItemFromCart(product.sku))}}>
+              onClick={() => {dispatch(removeItemFromCart(product.node.id))}}>
                 Remove from basket
               </Button>
             </Card.Body> 
