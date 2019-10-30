@@ -44,18 +44,17 @@ const Products = (props) => {
     }, 500)
   }
   
-  //probs need to use useEffect to grab the products?
-    useEffect(() => {
-      const getMeProducts = async () => {
-        const info = await axios.get('http://localhost:3003/products')
-        const getProducts = {
-          type: 'getProducts',
-          payload: info.data.products
-        }
-        dispatch(getProducts)
-      }
-      getMeProducts()
-    }, [])
+    // useEffect(() => {
+    //   const getMeProducts = async () => {
+    //     const info = await axios.get('http://localhost:3003/products')
+    //     const getProducts = {
+    //       type: 'getProducts',
+    //       payload: info.data.products
+    //     }
+    //     dispatch(getProducts)
+    //   }
+    //   getMeProducts()
+    // }, [])
     
       return (
         <Table striped bordered hover>
