@@ -25,3 +25,13 @@
   width: 100px
 }
 
+.lineItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.height {
+  height: 75px;
+}
+

@@ -39,7 +39,9 @@ function App(props) {
           <Tabs defaultActiveKey="Products" id="uncontrolled-tab-example">
             <Tab eventKey="Products" title="Products">
               <Products/>
-              <ProductsAlert/>
+              <div className="height">
+                <ProductsAlert/>
+              </div>
               <GetProducts/>
             </Tab>
             <Tab eventKey="Basket" title="Basket">

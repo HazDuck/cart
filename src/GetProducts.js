@@ -6,6 +6,7 @@ const GETPRODUCTSFROMSHOPIFY = gql`
 query getProducts {
   products(first: 5) {
     edges {
+      cursor
       node {
         id
         title
@@ -30,10 +31,11 @@ query getProducts {
 
 const GetProducts = (props) => {
     return (
-      <Button
-      onClick={()=>{}}>
-        Get more products (WIP)
-      </Button>
+      <div>
+        <Button onClick={()=>{}}>
+          Get more products (WIP)
+        </Button>
+      </div>
     )
 }
 
