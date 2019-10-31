@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import {Button, Card, Table, Image, Spinner } from 'react-bootstrap'
 import { MyContext } from './AppContext'
 import axios from 'axios'
-import { useQuery } from 'react-apollo';
+import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
 import { GETPRODUCTSFROMSHOPIFY } from './GetProducts'
 import { cartTotal } from './Basket'
@@ -42,9 +42,9 @@ const addProduct = (product, removeCartAlert) => {
 
 const Products = (props) => {
 
-  const {data, loading, error} = useQuery(GETPRODUCTSFROMSHOPIFY)
+  const {data, loading, error, fetchMore} = useQuery(GETPRODUCTSFROMSHOPIFY)
   const [dispatch, state, peteState, setPeteState] = useContext(MyContext)
-  
+  console.log(data)
   if (error) {
     console.log(error)
     return <p>it done error</p>}
