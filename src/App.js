@@ -6,7 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Basket } from './Basket';
 import { Tabs, Tab, Dropdown } from 'react-bootstrap';
 import { ProductsAlert } from './ProductsAlert';
-import { GetProducts } from './GetProducts';
 //packages required for apollo --> can you apollo-boost but took it apart when trying to get it to work
 import { ApolloProvider } from 'react-apollo';
 import { InMemoryCache } from 'apollo-cache-inmemory'
@@ -42,7 +41,6 @@ function App(props) {
               <div className="height">
                 <ProductsAlert/>
               </div>
-              <GetProducts/>
             </Tab>
             <Tab eventKey="Basket" title="Basket">
               <Basket/>

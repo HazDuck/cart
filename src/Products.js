@@ -87,6 +87,22 @@ const Products = (props) => {
         </tbody>
       </Table>
       <p>Subtotal: £{state.cart.length > 0 ? state.cart.reduce(cartTotal, 0) : 0}</p>
+      <div>
+        <Button onClick={()=>{
+          fetchMore({
+              variables:{"cursor": "eyJsYXN0X2lkIjo0MDUzNTkxMDMxODUzLCJsYXN0X3ZhbHVlIjoiNDA1MzU5MTAzMTg1MyJ9"},
+              updateQuery: (prevState, {fetchMoreResult}) => {
+                if (!fetchMoreResult) {
+                  return prevState
+                }
+                return Object.assign({}, prevState, {feed: [...prevState.feed, ...fetchMoreResult.feed]})
+              }
+            }
+          )
+        }}>
+          Get more products (WIP)
+        </Button>
+      </div>
     </div>
   )
 }
