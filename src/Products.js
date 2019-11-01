@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {Button, Card, Table, Image, Spinner } from 'react-bootstrap'
 import { MyContext } from './AppContext'
 import axios from 'axios'
@@ -44,7 +44,10 @@ const Products = (props) => {
 
   const {data, loading, error, fetchMore} = useQuery(GETPRODUCTSFROMSHOPIFY)
   const [dispatch, state, peteState, setPeteState] = useContext(MyContext)
-  console.log(data)
+  const [fetchingState, setFetchingState] = useState({
+    fetchingMoreProducts: false,
+    abletoRequestMoreProducts: true
+  })
   if (error) {
     console.log(error)
     return <p>it done error</p>}
@@ -53,7 +56,11 @@ const Products = (props) => {
     setTimeout(()=>{
       dispatch({type: 'removeAlert'})
     }, 500)
-  } 
+  }
+
+  const hasDuplicates = (array) => {
+    return (new Set(array)).size !== array.length;
+}
 
   return (
     <div>
@@ -88,20 +95,55 @@ const Products = (props) => {
       </Table>
       <p>Subtotal: £{state.cart.length > 0 ? state.cart.reduce(cartTotal, 0) : 0}</p>
       <div>
+        {fetchingState.fetchingMoreProducts ?
+        <Spinner animation="border" variant="info" />
+        :
+        fetchingState.abletoRequestMoreProducts ?
         <Button onClick={()=>{
+          setFetchingState({...fetchingState, 
+            fetchingMoreProducts: true})
+          
+          const findLastProductCursor = (data) => {
+            const lastProduct = data.products.edges[data.products.edges.length -1]
+            return lastProduct.cursor
+          }
+          
+          const lastProductCursor = findLastProductCursor(data)
           fetchMore({
-              variables:{"cursor": "eyJsYXN0X2lkIjo0MDUzNTkxMDMxODUzLCJsYXN0X3ZhbHVlIjoiNDA1MzU5MTAzMTg1MyJ9"},
-              updateQuery: (prevState, {fetchMoreResult}) => {
-                if (!fetchMoreResult) {
-                  return prevState
-                }
-                return Object.assign({}, prevState, {feed: [...prevState.feed, ...fetchMoreResult.feed]})
+            variables:{"cursor": lastProductCursor},
+            updateQuery: (prev, {fetchMoreResult}) => {
+              console.log('fmr')
+              console.log(fetchMoreResult)
+              if (fetchMoreResult.products.edges.length === 0) {
+                //need to use use state
+                setFetchingState({
+                  ...fetchingState, 
+                    fetchingMoreProducts: false,
+                    abletoRequestMoreProducts: false
+                })
+                console.log('no more results')
+                console.log(fetchingState.abletoRequestMoreProducts)
+                return prev
+              }
+
+              const updatedData = Object.assign({}, prev, {...prev,
+                products: {edges: [...prev.products.edges, ...fetchMoreResult.products.edges], __typename: "ProductConnection"}
+              })
+              setFetchingState({
+                ...fetchingState, 
+                  fetchingMoreProducts: false})
+              return updatedData
               }
             }
           )
-        }}>
-          Get more products (WIP)
+          }}>
+          Get more products
         </Button>
+        :
+        <Button variant="secondary" size="lg" disabled>
+        No more products
+        </Button>
+        }
       </div>
     </div>
   )

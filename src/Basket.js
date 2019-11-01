@@ -44,8 +44,6 @@ const Basket = (props) => {
   if (locaStoragelState) {
     state.cart = locaStoragelState
   }
-  console.log('state is')
-  console.log(state)
   return (
       <div>
         <Card>

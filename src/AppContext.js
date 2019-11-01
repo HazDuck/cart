@@ -12,7 +12,7 @@ const setLocalStorage = (updatedState) =>
   const AppContext = (props) => {
     const [peteState, setPeteState] = useState({
       cart: [],
-      showingSuccessfulAddToCart: false,
+      showingSuccessfulAddToCart: false
     })
     
     const [state, dispatch] = useReducer(
