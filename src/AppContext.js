@@ -9,16 +9,10 @@ const MyContext = createContext(
 const setLocalStorage = (updatedState) => 
   window.localStorage.setItem('cart', JSON.stringify(updatedState.cart))
   
-  
   const AppContext = (props) => {
     const [peteState, setPeteState] = useState({
       cart: [],
-      showingSuccessfulAddToCart: false,
-      loaded: false,
-      products: []
-      // [
-      //   {"sku": 101,"department": "home","productName": "cup","price": 5.00,"quantity": 1},{"sku": 102,"department": "office", "productName": "fork", "price": 10.00, "quantity": 1},{"sku": 103,"department": "b2b", "productName": "plate", "price": 100.00, "quantity": 1}
-      // ]
+      showingSuccessfulAddToCart: false
     })
     
     const [state, dispatch] = useReducer(
@@ -38,13 +32,13 @@ const setLocalStorage = (updatedState) =>
           
           case 'increaseQuantity':
             cart = [...state.cart]
-            productIndex = cart.findIndex(product => action.payload === product.sku)
+            productIndex = cart.findIndex(product => action.payload === product.node.id)
             //create a new array of everything we dont want to effect - all items with a sku that doesnt match the clicked item
-            cleanCart = cart.filter(cartItem => cartItem.sku !== action.payload)
+            cleanCart = cart.filter(cartItem => cartItem.node.id !== action.payload)
             //grab our target obj from our original array
-            const incrementTarget = cart.find(cartItem => cartItem.sku === action.payload)
+            const incrementTarget = cart.find(cartItem => cartItem.node.id === action.payload)
             //object assign parameters are where its going, whats being copied, whats being amended
-            const incremented = Object.assign({}, incrementTarget, {quantity: incrementTarget.quantity + 1})
+            const incremented = Object.assign({}, incrementTarget, {...incrementTarget, quantity: incrementTarget.quantity + 1})
           //put the array of objects back together in the right order - splices mutates the original array
           cleanCart.splice(productIndex, 0, incremented)
           //rename clean cart so its clearer
@@ -56,10 +50,10 @@ const setLocalStorage = (updatedState) =>
 
         case 'decreaseQuantity':
           cart = [...state.cart]
-          productIndex = cart.findIndex(product => action.payload === product.sku)
-          cleanCart = cart.filter(cartItem => cartItem.sku !== action.payload)
-          const decreaseTarget = cart.find(cartItem => cartItem.sku === action.payload)
-          const decreased = Object.assign({}, decreaseTarget, {quantity: decreaseTarget.quantity - 1 })
+          productIndex = cart.findIndex(product => action.payload === product.node.id)
+          cleanCart = cart.filter(cartItem => cartItem.node.id !== action.payload)
+          const decreaseTarget = cart.find(cartItem => cartItem.node.id === action.payload)
+          const decreased = Object.assign({}, decreaseTarget, {...decreaseTarget, quantity: decreaseTarget.quantity - 1 })
           if (decreased.quantity === 0) {
             outputCart = cleanCart
           } else {
@@ -73,13 +67,13 @@ const setLocalStorage = (updatedState) =>
         case 'addProduct':
           //get access to the cart spreading the cart.state inside an array as is req
           cart = [...state.cart]
-          updatedState = Object.assign({},state, {showingSuccessfulAddToCart: true, cart: [...cart, action.payload]})
+          updatedState = Object.assign({},state, {cart: [...cart, action.payload], showingSuccessfulAddToCart: true,})
           setLocalStorage(updatedState)
           return updatedState
 
         case 'removeItemFromCart':
             cart = [...state.cart]
-          const cartRemovedItem = cart.filter(product => product.sku !== action.payload)
+          const cartRemovedItem = cart.filter(product => product.node.id !== action.payload)
           //third parameter has to be an object?
           updatedState = Object.assign({}, state, {cart: cartRemovedItem})
           setLocalStorage(updatedState)

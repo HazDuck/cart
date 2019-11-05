@@ -1,11 +1,10 @@
 import React, { useContext } from 'react'
-import {Button, Card } from 'react-bootstrap'
 import { MyContext } from './AppContext'
-import { increaseQuantity } from './Products';
-
+import { increaseQuantity, incrementOrNewProduct } from './Products';
+import {Button, Card, Table, Image, Spinner } from 'react-bootstrap'
 
 const cartTotal = (accumulator, currentValue ) => {
-  const itemTotal = currentValue.quantity * currentValue.price
+  const itemTotal = currentValue.quantity * currentValue.node.priceRange.maxVariantPrice.amount
   return accumulator + itemTotal
 }
 
@@ -35,33 +34,43 @@ const decreaseQuantity = sku => {
 const Basket = (props) => {
   const [dispatch, state, peteState, setPeteState] = useContext(MyContext)
   const locaStoragelState = JSON.parse(window.localStorage.getItem('cart'))
+  
+  const removeCartAlert = () => {
+    setTimeout(()=>{
+      dispatch({type: 'removeAlert'})
+    }, 500)
+  } 
+
   if (locaStoragelState) {
     state.cart = locaStoragelState
   }
   return (
-    <Card>
       <div>
-        <p>Welcome to the basket</p>
+        <Card>
+          <p>Welcome to the basket</p>
+        </Card>
         <div>{state.cart.map((product)=>{
           return (
-            <Card.Body key={product.sku}>
-              ID:{product.sku}
-              Name:{product.productName}
-              Cost:{product.price}
-              Count: {product.quantity}
-              <Button
-              onClick={() => {dispatch(increaseQuantity(product.sku))}}>
-                +
-              </Button>
-              <Button
-              onClick={() => {dispatch(decreaseQuantity(product.sku))}}>
-                -
-              </Button>
-              <Button
-              onClick={() => {dispatch(removeItemFromCart(product.sku))}}>
-                Remove from basket
-              </Button>
-            </Card.Body> 
+            <Card border="primary" key={product.node.id}>
+              <Card.Body className="lineItem">
+                <Image className="productImages" src={product.node.images.edges[0].node.originalSrc} rounded />
+                {product.node.title}
+                <Button
+                onClick={() => {dispatch(incrementOrNewProduct(state.cart, product, removeCartAlert))}}>
+                  +
+                </Button>
+                {product.quantity}
+                <Button
+                onClick={() => {dispatch(decreaseQuantity(product.node.id))}}>
+                  -
+                </Button>
+                {product.node.priceRange.maxVariantPrice.amount}
+                <Button
+                onClick={() => {dispatch(removeItemFromCart(product.node.id))}}>
+                  Remove from basket
+                </Button>
+              </Card.Body>
+            </Card>
           )
         })
       }
@@ -71,52 +80,7 @@ const Basket = (props) => {
           Empty Basket
         </Button>
       </div>
-    </Card>
   )
 }
 
-export { Basket }
-
-  // const onlyUnique = (value, index, self) => { 
-  //   return self.indexOf(value) === index;
-  // }
-  
-  // const makeArrayOfProducts = (products) => {
-  //   let arrayOfIds = []
-  //   products.forEach(product => {
-  //     arrayOfIds.push(product.id)
-  //     })
-  //     return arrayOfIds
-  // }
-  
-  // const makeUniqueIDArray = array => array.filter(onlyUnique)
-  
-  // const countTypeOfProduct = (products) => {
-  //   const arrayOfIds = makeArrayOfProducts(products)
-  //   const uniqueVals = makeUniqueIDArray(arrayOfIds)
-  //   const countOfProducts = countNumberOfEachProduct(arrayOfIds, uniqueVals)
-  //   return countOfProducts
-  // }
-  
-  // const countNumberOfEachProduct = (arrayOfIds, uniqueVals) => {
-  //   const productCount = {}
-  //   uniqueVals.forEach((index)=>{
-  //     productCount[index] = 0
-  //   })
-  //   arrayOfIds.forEach(id => {
-  //     uniqueVals.forEach(value => {
-  //       if (id === value) {
-  //         productCount[value]++
-  //       } 
-  //     })
-  //   })
-  //   return productCount
-  // }
-  
-  // const makeArrayOfItems = (data) => {
-  //   let arrayOfIds = []
-  //   data.forEach(lineItem => {
-  //     arrayOfIds.push(lineItem.quantity)
-  //     })
-  //     return arrayOfIds
-  // }
+export { Basket, cartTotal }

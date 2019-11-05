@@ -1,23 +1,33 @@
-import React, { useContext, useEffect } from 'react'
-import {Button, Card, Table } from 'react-bootstrap'
-import { MyContext } from './AppContext'
-import axios from 'axios'
+import React from 'react'
+import {Button} from 'react-bootstrap'
+import gql from 'graphql-tag'
+import { useLazyQuery } from '@apollo/react-hooks'
 
-
-const GetProducts = (props) => {
-  const [dispatch, state, peteState, setPeteState] = useContext(MyContext)
-    const getMeProducts = async () => {
-        const info = await axios.get('http://localhost:3003/products')
-        const getProducts = {
-          type: 'getProducts',
-          payload: info.data.products
+const GETPRODUCTSFROMSHOPIFY = gql`
+query getProducts($count: Int = 5, $cursor: String) {
+  products(first: $count, after: $cursor) {
+    edges {
+      cursor
+      node {
+        id
+        title
+        priceRange {
+          maxVariantPrice {
+            amount
+            currencyCode
+          }
         }
-        //dispatch the result of getMeProducts, which is the obj getProducts, not the whole funciton!!!!
-        dispatch(getProducts)
+        productType
+        images (first: 1) {
+          edges {
+            node {
+              originalSrc
+            }
+          }
+        }
       }
-    return (
-      <Button onClick={() => getMeProducts()}>Get products</Button>
-    )
-}
+    }
+  }
+}`
 
-export { GetProducts }
+export { GETPRODUCTSFROMSHOPIFY }
