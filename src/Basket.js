@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { MyContext } from './AppContext'
-import { increaseQuantity, incrementOrNewProduct } from './Products';
-import {Button, Card, Table, Image, Spinner } from 'react-bootstrap'
+import { incrementOrNewProduct } from './Products';
+import {Button, Card, Image} from 'react-bootstrap'
 
 const cartTotal = (accumulator, currentValue ) => {
   const itemTotal = currentValue.quantity * currentValue.node.priceRange.maxVariantPrice.amount

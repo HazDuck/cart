@@ -4,9 +4,8 @@ import { AppContext } from './AppContext'
 import { Products } from './Products';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Basket } from './Basket';
-import { Tabs, Tab, Dropdown } from 'react-bootstrap';
+import { Tabs, Tab } from 'react-bootstrap';
 import { ProductsAlert } from './ProductsAlert';
-//packages required for apollo --> can you apollo-boost but took it apart when trying to get it to work
 import { ApolloProvider } from 'react-apollo';
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
@@ -18,7 +17,6 @@ const httpLink = createHttpLink({
 })
 
 const middlewareLink = setContext(() => ({
-  //below is the shopify requirements - probs in their documentation
   headers: {
     'X-Shopify-Storefront-Access-Token': '3e73237a41f3dd632213a7b22dc8fe5d'
   }
@@ -26,7 +24,6 @@ const middlewareLink = setContext(() => ({
 
 export const client = new ApolloClient({
   link: middlewareLink.concat(httpLink),
-  //again probs not needed if using boost
   cache: new InMemoryCache(),
 })
 
